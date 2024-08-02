@@ -67,6 +67,11 @@ public:
    m_stateChangedHandler(std::move(stateChangedHandler))
    {}
 
+   void addTag(const std::string& tag)
+   {
+      m_tags.push_back(tag);
+   }
+
    float get_setup_priority() const override
    {
       if (logger::global_logger != nullptr)
@@ -87,6 +92,11 @@ public:
          logger::global_logger->add_on_log_callback([this](int level, const char *tag, const char *message)
          {
             if ((m_state != State::BUFFERING) || (m_paused))
+            {
+               return;
+            }
+
+            if (!tagMatches(tag))
             {
                return;
             }
@@ -227,7 +237,26 @@ private:
       }
    }
 
+   bool tagMatches(const char* tag) const
+   {
+      if (m_tags.empty())
+      {
+         return true;
+      }
+
+      for (const auto& t: m_tags)
+      {
+         if (t == tag)
+         {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
    const Config m_config;
+   std::vector<std::string> m_tags;
    DumpProcessorFunction m_dumpProcessor;
    DumpingStateChangedHandler m_stateChangedHandler;
    State m_state{State::IDLE};

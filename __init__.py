@@ -15,6 +15,7 @@ CONF_SIZE_LIMIT = "size_limit"
 CONF_DUMP_LINES_PER_LOOP = "dump_lines_per_loop"
 CONF_ON_DUMP_LINE = "on_dump_line"
 CONF_ON_STATE_CHANGED = "on_dump_state_changed"
+CONF_TAGS = "tags"
 
 BufferingLogger = buff_log_ns.class_("BufferingLogger", cg.Component)
 
@@ -27,6 +28,7 @@ CONFIG_SCHEMA = cv.All(
             ),
       cv.Required(CONF_SIZE_LIMIT): cv.int_range(min=1024, max=1048576),
       cv.Optional(CONF_DUMP_LINES_PER_LOOP, default=20): cv.int_range(min=5, max=100),
+      cv.Optional(CONF_TAGS): cv.ensure_list(cv.std_string)
       cv.Required(CONF_ON_DUMP_LINE): cv.lambda_,
       cv.Optional(CONF_ON_STATE_CHANGED): cv.lambda_
    })
@@ -56,4 +58,8 @@ async def to_code(config):
                              config[CONF_SIZE_LIMIT],
                              config[CONF_DUMP_LINES_PER_LOOP],
                              dump_line_lambda_)
+      
+    if CONF_TAGS in config:
+        for tag in config[CONF_TAGS]:
+            cg.add(var.add_tag(tag))
    await cg.register_component(var, config)
