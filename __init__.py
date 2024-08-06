@@ -27,8 +27,8 @@ CONFIG_SCHEMA = cv.All(
                 cv.Range(min=core.TimePeriod(milliseconds=0), max=core.TimePeriod(milliseconds=10000)),
             ),
       cv.Required(CONF_SIZE_LIMIT): cv.int_range(min=1024, max=1048576),
-      cv.Optional(CONF_DUMP_LINES_PER_LOOP, default=20): cv.int_range(min=5, max=100),
-      cv.Optional(CONF_TAGS): cv.ensure_list(cv.std_string)
+      cv.Optional(CONF_DUMP_LINES_PER_LOOP, default=20): cv.int_range(min=1, max=100),
+      cv.Optional(CONF_TAGS): cv.ensure_list(cv.string_strict),
       cv.Required(CONF_ON_DUMP_LINE): cv.lambda_,
       cv.Optional(CONF_ON_STATE_CHANGED): cv.lambda_
    })
@@ -58,8 +58,8 @@ async def to_code(config):
                              config[CONF_SIZE_LIMIT],
                              config[CONF_DUMP_LINES_PER_LOOP],
                              dump_line_lambda_)
-      
-    if CONF_TAGS in config:
-        for tag in config[CONF_TAGS]:
-            cg.add(var.add_tag(tag))
+
+   if CONF_TAGS in config:
+      for tag in config[CONF_TAGS]:
+         cg.add(var.addTag(tag))
    await cg.register_component(var, config)
