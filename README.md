@@ -71,6 +71,8 @@ buff_log:
     }
   on_dump_line: |-
     ESP_LOGI("buff_log", "[%u][%d][%s]: %s", timestamp, level, tag.c_str(), payload.c_str());
+  tags:
+    - wifi
 
 wifi:
   on_connect:
