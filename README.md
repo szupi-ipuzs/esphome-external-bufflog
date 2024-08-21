@@ -32,19 +32,19 @@ The configuration items:
 * `size_limit` [required]: maximum number of __bytes__ that can be buffered. This lets you control the memory imprint. Reaching the limit will trigger going into the DUMPING state.
 * `buffering_timeout` [optional]: maximum time (in milliseconds) to wait before going into the DUMPING state. If not specified, 0ms is set.
 * `dump_lines_per_loop` [required]: maximum number of buffered log lines to be passed to `on_dump_line` in one component loop() call.
-* `on_dump_line` [required]: lambda that will get called during DUMPING state for each buffered log line. It receives the following parameters:
- --> buffLogRef - reference to the buff_log component. Usefull if you need to call it without using id() (which causes circular dependency).
- --> level - esphome debug level of the message
- --> tag - tag of the message
- --> payload - content of the message
- --> timestamp - reception timestamp (in milliseconds)
-* `on_dump_state_changed` [optional]: lambda that will get called when right before DUMPING is started and right after it's finished. Useful if you need to eg. pause the dumping. It receives the following parameters:
- --> buffLogRef - reference to the buff_log component. Usefull if you need to call it without using id() (which causes circular dependency).
- --> state - one of buff_log::DumpingState (STARTING or FINISHED) that explain why the lambda is called. 
- --> trigger - one of buff_log::DumpingTrigger that explains the reason for dumping (timeout/memory/forced). 
- --> size - size (in bytes) of the buffered data 
- --> lines - total number of lines of the buffered data 
- * `tags` [optional]: list of logger tags (strings) that should be buffered. If not specified logs with all tags will be buffered.
+* `on_dump_line` [required]: lambda that will get called during DUMPING state for each buffered log line. It receives the following parameters:  
+ --> buffLogRef - reference to the buff_log component. Usefull if you need to call it without using id() (which causes circular dependency).  
+ --> level - esphome debug level of the message  
+ --> tag - tag of the message  
+ --> payload - content of the message  
+ --> timestamp - reception timestamp (in milliseconds)  
+* `on_dump_state_changed` [optional]: lambda that will get called right before DUMPING is started and right after it's finished. Useful if you need to eg. pause the dumping. It receives the following parameters:  
+ --> buffLogRef - reference to the buff_log component. Usefull if you need to call it without using id() (which causes circular dependency).  
+ --> state - one of buff_log::DumpingState (STARTING or FINISHED) that explain why the lambda is called.  
+ --> trigger - one of buff_log::DumpingTrigger that explains the reason for dumping (timeout/memory/forced).  
+ --> size - size (in bytes) of the buffered data  
+ --> lines - total number of lines of the buffered data  
+ * `tags` [optional]: list of logger tags (strings) that should be buffered. If not specified logs with all tags will be buffered.  
 
 Example yaml:
 ```yaml
